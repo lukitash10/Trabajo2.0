@@ -1,0 +1,642 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+        <meta name="description" content="" />
+        <meta name="author" content="" />
+        <title>Vacaciones Top</title>
+        <!-- Favicon-->
+        <link rel="icon" type="image/x-icon" href="assets/favicon.ico" />
+        <!-- Bootstrap icons-->
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css" rel="stylesheet" />
+        <!-- Core theme CSS (includes Bootstrap)-->
+        <link href="css/styles.css" rel="stylesheet" />
+        <link rel="stylesheet" href="css/stylespopup.css">
+        <script type="text/javascript" src="https://cdn.jsdelivr.net/jquery/latest/jquery.min.js"></script>
+        <script type="text/javascript" src="https://cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
+        <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
+        <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css" />
+
+
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/css/bootstrap.min.css" integrity="sha384-9gVQ4dYFwwWSjIDZnLEWnxCjeSWFphJiwGPXr1jddIhOegiu1FwO5qRGvFXOdJZ4" crossorigin="anonymous">
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+          // Variables
+          const baseDeDatos = [
+              {
+                  id: 1,
+                  nombre: 'Hotel Algeciras',
+                  precio: 16.000 ,
+              },
+              {
+                  id: 2,
+                  nombre: 'Terrazas al Mar Pinamar Resort & Spa',
+                  precio: 18.000,
+
+              },
+              {
+                  id: 3,
+                  nombre: 'Pinamar Beach Resort',
+                  precio: 17.000,
+
+              },
+              {
+                  id: 4,
+                  nombre: 'Albar Club de Mar',
+                  precio: 15.000,
+              },
+
+              {
+                  id:5,
+                  nombre: 'Hotel Arenas',
+                  precio: 20.000 ,
+              },
+
+              {
+                  id:6,
+                  nombre: 'Hotel Las Araucarias',
+                  precio: 21.000 ,
+              },
+              {
+                  id:7,
+                  nombre: 'Hotel Playas',
+                  precio: 24.000 ,
+              },
+              {
+                  id:8,
+                  nombre: 'Hotel Green Sea Apart',
+                  precio: 27.000 ,
+              },
+
+
+          ];
+
+          let carrito = [];
+          const divisa = '.000';
+          const DOMitems = document.querySelector('#items');
+          const DOMcarrito = document.querySelector('#carrito');
+          const DOMtotal = document.querySelector('#total');
+          const DOMbotonVaciar = document.querySelector('#boton-vaciar');
+
+          // Funciones
+
+          /**
+          * Dibuja todos los productos a partir de la base de datos. No confundir con el carrito
+          */
+          function renderizarProductos() {
+              baseDeDatos.forEach((info) => {
+                  // Estructura
+                  const miNodo = document.createElement('div');
+                  miNodo.classList.add('card', 'col-sm-4');
+                  // Body
+                  const miNodoCardBody = document.createElement('div');
+                  miNodoCardBody.classList.add('card-body');
+                  // Titulo
+                  const miNodoTitle = document.createElement('h5');
+                  miNodoTitle.classList.add('card-title');
+                  miNodoTitle.textContent = info.nombre;
+                  // Imagen
+                  const miNodoImagen = document.createElement('img');
+                  miNodoImagen.classList.add('img-fluid');
+                  miNodoImagen.setAttribute('src', info.imagen);
+                  // Precio
+                  const miNodoPrecio = document.createElement('p');
+                  miNodoPrecio.classList.add('card-text');
+                  miNodoPrecio.textContent = `${info.precio}${divisa}`;
+                  // Boton 
+                  const miNodoBoton = document.createElement('button');
+                  miNodoBoton.classList.add('btn', 'btn-primary');
+                  miNodoBoton.textContent = '+';
+                  miNodoBoton.setAttribute('marcador', info.id);
+                  miNodoBoton.addEventListener('click', anyadirProductoAlCarrito);
+                  // Insertamos
+                  miNodoCardBody.appendChild(miNodoImagen);
+                  miNodoCardBody.appendChild(miNodoTitle);
+                  miNodoCardBody.appendChild(miNodoPrecio);
+                  miNodoCardBody.appendChild(miNodoBoton);
+                  miNodo.appendChild(miNodoCardBody);
+                  DOMitems.appendChild(miNodo);
+              });
+          }
+
+          /**
+          * Evento para añadir un producto al carrito de la compra
+          */
+          function anyadirProductoAlCarrito(evento) {
+              // Anyadimos el Nodo a nuestro carrito
+              carrito.push(evento.target.getAttribute('marcador'))
+              // Actualizamos el carrito 
+              renderizarCarrito();
+
+          }
+
+          /**
+          * Dibuja todos los productos guardados en el carrito
+          */
+          function renderizarCarrito() {
+              // Vaciamos todo el html
+              DOMcarrito.textContent = '';
+              // Quitamos los duplicados
+              const carritoSinDuplicados = [...new Set(carrito)];
+              // Generamos los Nodos a partir de carrito
+              carritoSinDuplicados.forEach((item) => {
+                  // Obtenemos el item que necesitamos de la variable base de datos
+                  const miItem = baseDeDatos.filter((itemBaseDatos) => {
+                      // ¿Coincide las id? Solo puede existir un caso
+                      return itemBaseDatos.id === parseInt(item);
+                  });
+                  // Cuenta el número de veces que se repite el producto
+                  const numeroUnidadesItem = carrito.reduce((total, itemId) => {
+                      // ¿Coincide las id? Incremento el contador, en caso contrario no mantengo
+                      return itemId === item ? total += 1 : total;
+                  }, 0);
+                  // Creamos el nodo del item del carrito
+                  const miNodo = document.createElement('li');
+                  miNodo.classList.add('list-group-item', 'text-right', 'mx-2');
+                  miNodo.textContent = `${numeroUnidadesItem} x ${miItem[0].nombre} - ${miItem[0].precio}${divisa}`;
+                  // Boton de borrar
+                  const miBoton = document.createElement('button');
+                  miBoton.classList.add('btn', 'btn-danger', 'mx-5');
+                  miBoton.textContent = 'X';
+                  miBoton.style.marginLeft = '1rem';
+                  miBoton.dataset.item = item;
+                  miBoton.addEventListener('click', borrarItemCarrito);
+                  // Mezclamos nodos
+                  miNodo.appendChild(miBoton);
+                  DOMcarrito.appendChild(miNodo);
+              });
+             // Renderizamos el precio total en el HTML
+             DOMtotal.textContent = calcularTotal();
+          }
+
+          /**
+          * Evento para borrar un elemento del carrito
+          */
+          function borrarItemCarrito(evento) {
+              // Obtenemos el producto ID que hay en el boton pulsado
+              const id = evento.target.dataset.item;
+              // Borramos todos los productos
+              carrito = carrito.filter((carritoId) => {
+                  return carritoId !== id;
+              });
+              // volvemos a renderizar
+              renderizarCarrito();
+          }
+
+          /**
+           * Calcula el precio total teniendo en cuenta los productos repetidos
+           */
+          function calcularTotal() {
+              // Recorremos el array del carrito 
+              return carrito.reduce((total, item) => {
+                  // De cada elemento obtenemos su precio
+                  const miItem = baseDeDatos.filter((itemBaseDatos) => {
+                      return itemBaseDatos.id === parseInt(item);
+                  });
+                  // Los sumamos al total
+                  return total + miItem[0].precio;
+              }, 0).toFixed(2);
+          }
+
+          /**
+          * Varia el carrito y vuelve a dibujarlo
+          */
+          function vaciarCarrito() {
+              // Limpiamos los productos guardados
+              carrito = [];
+              // Renderizamos los cambios
+              renderizarCarrito();
+          }
+
+          // Eventos
+          DOMbotonVaciar.addEventListener('click', vaciarCarrito);
+
+          // Inicio
+          renderizarProductos();
+          renderizarCarrito();
+        });
+    </script>
+</head>
+
+    </head>
+    <body>
+        <!-- Navigation-->
+        <nav class="navbar navbar-expand-lg navbar-light bg-light">
+            <div class="container px-4 px-lg-5">
+                <a class="navbar-brand" href="index.html"><img class="imagen__logo" src="logovt.png" alt=""></a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation"><span class="navbar-toggler-icon"></span></button>
+                <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                    <ul class="navbar-nav me-auto mb-2 mb-lg-0 ms-lg-4">
+                        <li class="nav-item"><a class="nav-link active" aria-current="page" href="index.html">Inicio</a></li>
+                        <li class="nav-item"><a class="nav-link" href="contacto.html">Contactanos</a></li>
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" id="navbarDropdown" href="pqelegirnos.html" role="button"aria-expanded="false">Porque elegirnos</a>
+                            </ul>
+                        </li>
+                    </ul>
+                    <form class="d-flex">
+                        
+                    </form>
+                </div>
+            </div>
+        </nav>
+
+
+        <!-- Header-->
+        <header class="bg-dark py-5">
+            <div class="container px-4 px-lg-5 my-5">
+                <div class="text-center text-white">
+                    <h1 class="display-4 fw-bolder">Pinamar</h1>
+                    <p class="lead fw-normal text-white-50 mb-0">Los mejores hoteles al mejor precio</p>
+                </div>
+            </div>
+        </header>
+
+
+
+        <!--CARRITO -->
+        <!--<div class="container">
+            <div class="row">
+                <!- Elementos generados a partir del JSON -->
+                <!--<main id="items" class="col-sm-8 row"></main>
+                <!- Carrito -->
+                <!--<aside class="col-sm-4">
+                    <!-<h2>Carrito</h2>
+                    <!- Elementos del carrito -->
+                    <!--<ul id="carrito" class="list-group"></ul>
+                    <!-<hr>
+                    <!- Precio total -->
+                    <!--<p class="text-right">Total: <span id="total"></span>0&dollar;</p>
+                    <!-<button id="boton-vaciar" class="btn btn-danger">Vaciar</button>
+                <!-</aside>
+            <!-</div>
+        <!-</div>
+        
+
+
+
+
+
+        <!- Section-->
+        <section class="py-5">
+            <div class="ocultar" id="carrito"></div>
+            <div class="ocultar" id="sombra"></div>
+            <div class="container px-4 px-lg-5 mt-5">
+                <div class="row gx-4 gx-lg-5 row-cols-2 row-cols-md-3 row-cols-xl-4 justify-content-center" id="divhoteles">
+                    <div class="col mb-5">
+                        <div class="card h-100">
+                            <!-- Product image-->
+                            <img class="card-img-top" src="hotelalgeciras.png" alt="..." />
+                            <!-- Product details-->
+                            <div class="card-body p-4">
+                                <div class="text-center">
+                                    <!-- Product name-->
+                                    <h5 class="fw-bolder">Hotel Algeciras</h5>
+                                    <!-- Product price-->
+                                    <p>El Hotel Algeciras, con una sauna y una piscina al aire libre de temporada, ofrece alojamiento con conexión WiFi gratuita en Pinamar. El establecimiento cuenta con aparcamiento privado gratuito y sirve un desayuno diario.</p>
+                                    <p><a href="https://www.google.com/maps/place/Hotel+Algeciras/@-37.1153254,-56.8613583,15z/data=!4m8!3m7!1s0x0:0x1a897fe5b944a631!5m2!4m1!1i2!8m2!3d-37.1153318!4d-56.86129">ubicación</a></p>
+                                    <div class="d-flex justify-content-center small text-warning mb-2">
+                                        <div class="bi-star-fill"></div>
+                                        <div class="bi-star-fill"></div>
+                                        <div class="bi-star-fill"></div>
+                                        <div class="bi-star-fill"></div>
+                                        <div class="bi-star-fill"></div>
+                                    </div>
+                                    $16.000
+                                </div>
+                                <!--CALENDARIO!!!!!!!-->
+                                <input type="text" name="daterange" value="01/01/2022 - 01/15/2022" />
+
+                                <script>
+                                $(function() {
+                                    $('input[name="daterange"]').daterangepicker({
+                                        opens: 'left'
+                                    }, function(start, end, label) {
+                                        console.log("A new date selection was made: " + start.format('YYYY-MM-DD') + ' to ' + end.format('YYYY-MM-DD'));
+                                    });
+                                });
+                                </script>
+                                
+                            </div>
+                            <!-- Product actions-->
+                            <div class="card-footer p-4 pt-0 border-top-0 bg-transparent">
+                                <div class="text-center"><a id="carrito1"class="btn btn-outline-dark mt-auto" href="#">Agregar al carrito</a></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col mb-5">
+                        <div class="card h-100">
+                            <!-- Sale badge-->
+                            <div class="badge bg-dark text-white position-absolute" style="top: 0.5rem; right: 0.5rem">Sale</div>
+                            <!-- Product image-->
+                            <img class="card-img-top" src="sparesort.jpg" alt="..." />
+                            <!-- Product details-->
+                            <div class="card-body p-4">
+                                <div class="text-center">
+                                    <!-- Product name-->
+                                    <h5 class="fw-bolder">Terrazas al Mar Pinamar Resort & Spa</h5>
+                                    <!-- Product reviews-->
+                                    <p>Este sofisticado complejo turístico en un edificio de ladrillos rojos se encuentra frente a la playa, a 14 minutos a pie del Teatro De La Torre, y a 3 km del club de golf Links Pinamar.</p>
+                                    <p><a href="https://www.google.com/maps/place/Terrazas+al+Mar+Pinamar+Resort+%26+Spa/@-37.115237,-56.8561263,17z/data=!3m1!4b1!4m8!3m7!1s0x95bccac866b62267:0x5d00053c3817ecd3!5m2!4m1!1i2!8m2!3d-37.1152413!4d-56.8539376">ubicación</a></p>
+                                    <div class="d-flex justify-content-center small text-warning mb-2">
+                                        <div class="bi-star-fill"></div>
+                                        <div class="bi-star-fill"></div>
+                                        <div class="bi-star-fill"></div>
+                                        <div class="bi-star-fill"></div>
+                                        <div class="bi-star-fill"></div>
+                                    </div>
+                                    <!-- Product price-->
+                                    <span class="text-muted text-decoration-line-through">$20.000</span>
+                                    $18.000
+                                </div>
+                                <!--CALENDARIO!!!!!!!-->
+                                <input type="text" name="daterange" value="01/01/2022 - 01/15/2022" />
+
+                                <script>
+                                $(function() {
+                                    $('input[name="daterange"]').daterangepicker({
+                                        opens: 'left'
+                                    }, function(start, end, label) {
+                                        console.log("A new date selection was made: " + start.format('YYYY-MM-DD') + ' to ' + end.format('YYYY-MM-DD'));
+                                    });
+                                });
+                                </script>
+                                </div>
+                            <!-- Product actions-->
+                            <div class="card-footer p-4 pt-0 border-top-0 bg-transparent">
+                                <div class="text-center"><a id="carrito2" class="btn btn-outline-dark mt-auto" href="#">Agregar al carrito</a></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col mb-5">
+                        <div class="card h-100">
+                            <!-- Sale badge-->
+                            <div class="badge bg-dark text-white position-absolute" style="top: 0.5rem; right: 0.5rem">Sale</div>
+                            <!-- Product image-->
+                            <img class="card-img-top" src="bech resort.png" alt="..." />
+                            <!-- Product details-->
+                            <div class="card-body p-4">
+                                <div class="text-center">
+                                    <!-- Product name-->
+                                    <h5 class="fw-bolder">Pinamar Beach Resort</h5>
+                                    <!-- Product price-->
+                                    <p>Pensado para el tiempo de descanso, Pinamar Beach Resort cuenta con las mejores vistas al mar. El espacio ideal para disfrutar de una piscina exterior con solarium, mas un renovado spa con sauna, hidromasaje y una nueva infinit pool in-out climatizada.</p>
+                                    <p><a href="https://www.google.com/maps/place/Pinamar+Beach+Resort/@-37.1063228,-56.8484019,17z/data=!3m1!4b1!4m8!3m7!1s0x959c9c964a44a03d:0x31c1700f010a56f0!5m2!4m1!1i2!8m2!3d-37.1063271!4d-56.8462132">ubicación</a></p>
+                                    <div class="d-flex justify-content-center small text-warning mb-2">
+                                        <div class="bi-star-fill"></div>
+                                        <div class="bi-star-fill"></div>
+                                        <div class="bi-star-fill"></div>
+                                        <div class="bi-star-fill"></div>
+                                    </div>
+                                    <span class="text-muted text-decoration-line-through">$20.000</span>
+                                    $17.000
+                                </div>
+                                <!--CALENDARIO!!!!!!!-->
+                                <input type="text" name="daterange" value="01/01/2022 - 01/15/2022" />
+
+                                <script>
+                                $(function() {
+                                    $('input[name="daterange"]').daterangepicker({
+                                        opens: 'left'
+                                    }, function(start, end, label) {
+                                        console.log("A new date selection was made: " + start.format('YYYY-MM-DD') + ' to ' + end.format('YYYY-MM-DD'));
+                                    });
+                                });
+                                </script>
+                                
+                            </div>
+                            <!-- Product actions-->
+                            <div class="card-footer p-4 pt-0 border-top-0 bg-transparent">
+                                <div class="text-center"><a id="carrito3" class="btn btn-outline-dark mt-auto" href="#">Agregar al carrito</a></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col mb-5">
+                        <div class="card h-100">
+                            <!-- Product image-->
+                            <img class="card-img-top" src="Albar Club de Mar.png" alt="..." />
+                            <!-- Product details-->
+                            <div class="card-body p-4">
+                                <div class="text-center">
+                                    <!-- Product name-->
+                                    <h5 class="fw-bolder">Albar Club de Mar</h5>
+                                    <!-- Product reviews-->
+                                    <p>Los mejores servicios para que tu estadía sea una fusión perfecta entre confort y diversión. Nuestro complejo está situado cerca de todas las atracciones del destino más exclusivo de la costa atlántica.</p>
+                                   <p><a href="https://www.google.com/maps/place/Albar+Club+de+Mar/@-37.1105811,-56.8788485,17z/data=!3m1!4b1!4m8!3m7!1s0x959c9d209a13e3bb:0x4f3af1368251c457!5m2!4m1!1i2!8m2!3d-37.1105854!4d-56.8766598">ubicación</a></p>
+                                    <!-- Product price-->
+                                    <div class="d-flex justify-content-center small text-warning mb-2">
+                                        <div class="bi-star-fill"></div>
+                                        <div class="bi-star-fill"></div>
+                                        <div class="bi-star-fill"></div>
+                                        <div class="bi-star-fill"></div>
+                                        <div class="bi-star-fill"></div>
+                                    </div>
+                                    $15.000
+                                </div>
+                                <!--CALENDARIO!!!!!!!-->
+                                <input type="text" name="daterange" value="01/01/2022 - 01/15/2022" />
+
+                                <script>
+                                $(function() {
+                                    $('input[name="daterange"]').daterangepicker({
+                                        opens: 'left'
+                                    }, function(start, end, label) {
+                                        console.log("A new date selection was made: " + start.format('YYYY-MM-DD') + ' to ' + end.format('YYYY-MM-DD'));
+                                    });
+                                });
+                                </script>
+                            </div>
+                            <!-- Product actions-->
+                            <div class="card-footer p-4 pt-0 border-top-0 bg-transparent">
+                                <div class="text-center"><a id="carrito4" class="btn btn-outline-dark mt-auto" href="#">Agregar al carrito</a></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col mb-5">
+                        <div class="card h-100">
+                            <!-- Sale badge-->
+                            <div class="badge bg-dark text-white position-absolute" style="top: 0.5rem; right: 0.5rem">Sale</div>
+                            <!-- Product image-->
+                            <img class="card-img-top" src="hotel arenas2.jpg" alt="..." />
+                            <!-- Product details-->
+                            <div class="card-body p-4">
+                                <div class="text-center">
+                                    <!-- Product name-->
+                                    <h5 class="fw-bolder">Hotel Arenas</h5>
+                                    <!-- Product price-->
+                                    <p>El Hotel Arenas, situado en Pinamar, ofrece alojamientos con un parque infantil y una terraza para tomar el sol en Pinamar. Hay conexión WiFi gratuita y aparcamiento privado. Se sirve un desayuno diario.</p>
+                                    <p><a href="https://www.google.com/maps/place/Hotel+Arenas/@-37.1136314,-56.8666223,17z/data=!3m1!4b1!4m9!3m8!1s0x959c9ce57dc9575f:0x77ed186ee91bb24!5m2!4m1!1i2!8m2!3d-37.1136021!4d-56.8644151!16s%2Fg%2F1tcw4t38">ubicación</a></p>
+                                    <div class="d-flex justify-content-center small text-warning mb-2">
+                                        <div class="bi-star-fill"></div>
+                                        <div class="bi-star-fill"></div>
+                                        <div class="bi-star-fill"></div>
+                                        <div class="bi-star-fill"></div>
+                                    </div>
+                                    <span class="text-muted text-decoration-line-through">$25.000</span>
+                                    $20.000
+                                </div>
+                                <!--CALENDARIO!!!!!!!-->
+                                <input type="text" name="daterange" value="01/01/2022 - 01/15/2022" />
+
+                                <script>
+                                $(function() {
+                                    $('input[name="daterange"]').daterangepicker({
+                                        opens: 'left'
+                                    }, function(start, end, label) {
+                                        console.log("A new date selection was made: " + start.format('YYYY-MM-DD') + ' to ' + end.format('YYYY-MM-DD'));
+                                    });
+                                });
+                                </script>
+                            </div>
+                            <!-- Product actions-->
+                            <div class="card-footer p-4 pt-0 border-top-0 bg-transparent">
+                                <div class="text-center"><a id="carrito5" class="btn btn-outline-dark mt-auto" href="#">Agregar al carrito</a></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col mb-5">
+                        <div class="card h-100">
+                            <!-- Product image-->
+                            <img class="card-img-top" src="hotel araucarias2.jpg" alt="..." />
+                            <!-- Product details-->
+                            <div class="card-body p-4">
+                                <div class="text-center">
+                                    <!-- Product name-->
+                                    <h5 class="fw-bolder">Hotel Las Araucarias</h5>
+                                    <!-- Product price-->
+                                    <p>Hotel Las Araucarias se encuentra ubicado en Avenida Bunge 1411, concebido para que el huésped se sienta como en su hogar. Su calidad y confort se siente tanto en las salas como en cada una de sus habitaciones.</p>
+                                    <p><a href="https://www.google.com/maps/place/Las+Araucarias/@-37.1116602,-56.8696714,17z/data=!4m8!3m7!1s0x959c9cddf15934ab:0xa328f6039ffef314!5m2!4m1!1i2!8m2!3d-37.1112784!4d-56.8696012">ubicación</a></p>
+                                    <div class="d-flex justify-content-center small text-warning mb-2">
+                                        <div class="bi-star-fill"></div>
+                                        <div class="bi-star-fill"></div>
+                                        <div class="bi-star-fill"></div>
+                                        <div class="bi-star-fill"></div>
+                                    </div>
+                                    $21.000
+                                </div>
+                                <!--CALENDARIO!!!!!!!-->
+                                <input type="text" name="daterange" value="01/01/2022 - 01/15/2022" />
+
+                                <script>
+                                $(function() {
+                                    $('input[name="daterange"]').daterangepicker({
+                                        opens: 'left'
+                                    }, function(start, end, label) {
+                                        console.log("A new date selection was made: " + start.format('YYYY-MM-DD') + ' to ' + end.format('YYYY-MM-DD'));
+                                    });
+                                });
+                                </script>
+                            </div>
+                            <!-- Product actions-->
+                            <div class="card-footer p-4 pt-0 border-top-0 bg-transparent">
+                                <div class="text-center"><a id="carrito6" class="btn btn-outline-dark mt-auto" href="#">Agregar al carrito</a></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col mb-5">
+                        <div class="card h-100">
+                            <!-- Sale badge-->
+                            <div class="badge bg-dark text-white position-absolute" style="top: 0.5rem; right: 0.5rem">Sale</div>
+                            <!-- Product image-->
+                            <img class="card-img-top" src="Playas Hotel.jpg" alt="..." />
+                            <!-- Product details-->
+                            <div class="card-body p-4">
+                                <div class="text-center">
+                                    <!-- Product name-->
+                                    <h5 class="fw-bolder">Hotel Playas</h5>
+                                    <!-- Product reviews-->
+                                    <p>El Playas Hotel es un ícono de Pinamar, que sin perder su estilo clásico, asombra con su moderna renovación y con un fuerte compromiso con la cultura. Sus instalaciones reciben al visitante con elegancia y confort propios de un hotel con estilo e historia.</p>
+                                    <p><a href="https://www.google.com/maps/place/Playas+Hotel/@-37.1158569,-56.8597334,17z/data=!3m1!4b1!4m8!3m7!1s0x959c9cedb75c374f:0xe2c8b312e4f85eca!5m2!4m1!1i2!8m2!3d-37.1158612!4d-56.8575447">ubicación</a></p>
+                                    <div class="d-flex justify-content-center small text-warning mb-2">
+                                        <div class="bi-star-fill"></div>
+                                        <div class="bi-star-fill"></div>
+                                        <div class="bi-star-fill"></div>
+                                        <div class="bi-star-fill"></div>
+                                        <div class="bi-star-fill"></div>
+                                    </div>
+                                    <!-- Product price-->
+                                    <span class="text-muted text-decoration-line-through">$29.000</span>
+                                    $24.000
+                                </div>
+                                <!--CALENDARIO!!!!!!!-->
+                                <input type="text" name="daterange" value="01/01/2022 - 01/15/2022" />
+
+                                <script>
+                                $(function() {
+                                    $('input[name="daterange"]').daterangepicker({
+                                        opens: 'left'
+                                    }, function(start, end, label) {
+                                        console.log("A new date selection was made: " + start.format('YYYY-MM-DD') + ' to ' + end.format('YYYY-MM-DD'));
+                                    });
+                                });
+                                </script>
+                            </div>
+                            <!-- Product actions-->
+                            <div class="card-footer p-4 pt-0 border-top-0 bg-transparent">
+                                <div class="text-center"><a id="carrito7" class="btn btn-outline-dark mt-auto" href="#">Agregar al carrito</a></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col mb-5">
+                        <div class="card h-100">
+                            <!-- Product image-->
+                            <img class="card-img-top" src="green-sea-apart-hotel.jpg" alt="..." />
+                            <!-- Product details-->
+                            <div class="card-body p-4">
+                                <div class="text-center">
+                                    <!-- Product name-->
+                                    <h5 class="fw-bolder">Hotel Green Sea Apart</h5>
+                                    <!-- Product reviews-->
+                                    <p>Ofrece la mejor infraestructura edilicia y los más completos servicios. Les da la bienvenida a los huéspedes una frondosa arboleda acompañada del relajante sonido del agua que brota de la fuente. Un amplio lobby con agradables livings </p>
+                                    <p><a href="https://www.google.com/maps/place/Green+Sea+Apart+Hotel/@-37.1121685,-56.8711722,17z/data=!3m1!4b1!4m8!3m7!1s0x959c9ce57dc9575f:0x9854f1cf031824a6!5m2!4m1!1i2!8m2!3d-37.1121728!4d-56.8689835">ubicación</a></p>
+                                    <div class="d-flex justify-content-center small text-warning mb-2">
+                                        <div class="bi-star-fill"></div>
+                                        <div class="bi-star-fill"></div>
+                                        <div class="bi-star-fill"></div>
+                                        <div class="bi-star-fill"></div>
+                                        <div class="bi-star-fill"></div>
+                                    </div>
+                                    <!-- Product price-->
+                                    $27.000
+                                </div>
+                                <!--CALENDARIO!!!!!!!-->
+                                <input type="text" name="daterange" value="01/01/2022 - 01/15/2022" />
+
+                                <script>
+                                $(function() {
+                                    $('input[name="daterange"]').daterangepicker({
+                                        opens: 'left'
+                                    }, function(start, end, label) {
+                                        console.log("A new date selection was made: " + start.format('YYYY-MM-DD') + ' to ' + end.format('YYYY-MM-DD'));
+                                    });
+                                });
+                                </script>
+                            </div>
+                            <!-- Product actions-->
+                            <div class="card-footer p-4 pt-0 border-top-0 bg-transparent">
+                                <div class="text-center"><a id="carrito8" class="btn btn-outline-dark mt-auto" href="#">Agregar al carrito</a></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <!-- Footer-->
+        <footer class="py-5 bg-dark">
+            <div class="container"><p class="m-0 text-center text-white">Vacaciones Top © Todos los derechos reservados Henestrosa Lucas, Giordano Juan Marco, Marzano Pedro, Spagna Bautista. Litovicius Patricia Carina. Diseño y Desarrollo web</p></div>
+        </footer>
+        <script src="js/main.js"></script>
+        <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+        <!-- Bootstrap core JS-->
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+        <!-- Core theme JS-->
+        <script src="js/scripts.js"></script>
+        
+
+
+
+
+
+    </body>
+</html>
