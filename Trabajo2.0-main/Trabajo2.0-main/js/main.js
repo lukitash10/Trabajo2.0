@@ -49,7 +49,7 @@ const agregarAlCarrito =(index) => {
         cantDiasDisplay.textContent= "Duración de estadia: " + cantidad
         document.querySelector("#total").textContent="Precio total: " + (cantidad*carrito.precio)
     }
-    document.querySelector("#Reservar").onclick=()=>{swal("Good job!", "You clicked the button!", "success");}
+    document.querySelector("#Reservar").onclick=()=>{swal("Enhorabuena!", "Agendamos su reserva!", "success");}
 }
 
 const carrito1=document.querySelector("#carrito1")
