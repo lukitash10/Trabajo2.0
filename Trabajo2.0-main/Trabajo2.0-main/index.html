@@ -12,6 +12,11 @@
         <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css" rel="stylesheet" />
         <!-- Core theme CSS (includes Bootstrap)-->
         <link href="css/styles.css" rel="stylesheet" />
+        <link rel="stylesheet" href="css/stylespopup.css">
+        <script type="text/javascript" src="https://cdn.jsdelivr.net/jquery/latest/jquery.min.js"></script>
+        <script type="text/javascript" src="https://cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
+        <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
+        <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css" />
 
 
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/css/bootstrap.min.css" integrity="sha384-9gVQ4dYFwwWSjIDZnLEWnxCjeSWFphJiwGPXr1jddIhOegiu1FwO5qRGvFXOdJZ4" crossorigin="anonymous">
@@ -250,33 +255,35 @@
 
 
 
-
-        <div class="container">
+        <!--CARRITO -->
+        <!--<div class="container">
             <div class="row">
-                <!-- Elementos generados a partir del JSON -->
-                <main id="items" class="col-sm-8 row"></main>
-                <!-- Carrito -->
-                <aside class="col-sm-4">
-                    <h2>Carrito</h2>
-                    <!-- Elementos del carrito -->
-                    <ul id="carrito" class="list-group"></ul>
-                    <hr>
-                    <!-- Precio total -->
-                    <p class="text-right">Total: <span id="total"></span>0&dollar;</p>
-                    <button id="boton-vaciar" class="btn btn-danger">Vaciar</button>
-                </aside>
-            </div>
-        </div>
+                <!- Elementos generados a partir del JSON -->
+                <!--<main id="items" class="col-sm-8 row"></main>
+                <!- Carrito -->
+                <!--<aside class="col-sm-4">
+                    <!-<h2>Carrito</h2>
+                    <!- Elementos del carrito -->
+                    <!--<ul id="carrito" class="list-group"></ul>
+                    <!-<hr>
+                    <!- Precio total -->
+                    <!--<p class="text-right">Total: <span id="total"></span>0&dollar;</p>
+                    <!-<button id="boton-vaciar" class="btn btn-danger">Vaciar</button>
+                <!-</aside>
+            <!-</div>
+        <!-</div>
         
 
 
 
 
 
-        <!-- Section-->
+        <!- Section-->
         <section class="py-5">
+            <div class="ocultar" id="carrito"></div>
+            <div class="ocultar" id="sombra"></div>
             <div class="container px-4 px-lg-5 mt-5">
-                <div class="row gx-4 gx-lg-5 row-cols-2 row-cols-md-3 row-cols-xl-4 justify-content-center">
+                <div class="row gx-4 gx-lg-5 row-cols-2 row-cols-md-3 row-cols-xl-4 justify-content-center" id="divhoteles">
                     <div class="col mb-5">
                         <div class="card h-100">
                             <!-- Product image-->
@@ -297,11 +304,23 @@
                                     </div>
                                     $16.000
                                 </div>
+                                <!--CALENDARIO!!!!!!!-->
+                                <input type="text" name="daterange" value="01/01/2022 - 01/15/2022" />
+
+                                <script>
+                                $(function() {
+                                    $('input[name="daterange"]').daterangepicker({
+                                        opens: 'left'
+                                    }, function(start, end, label) {
+                                        console.log("A new date selection was made: " + start.format('YYYY-MM-DD') + ' to ' + end.format('YYYY-MM-DD'));
+                                    });
+                                });
+                                </script>
                                 
                             </div>
                             <!-- Product actions-->
                             <div class="card-footer p-4 pt-0 border-top-0 bg-transparent">
-                                <div class="text-center"><a class="btn btn-outline-dark mt-auto" href="#">Agregar al carrito</a></div>
+                                <div class="text-center"><a id="carrito1"class="btn btn-outline-dark mt-auto" href="#">Agregar al carrito</a></div>
                             </div>
                         </div>
                     </div>
@@ -329,10 +348,22 @@
                                     <span class="text-muted text-decoration-line-through">$20.000</span>
                                     $18.000
                                 </div>
-                                                            </div>
+                                <!--CALENDARIO!!!!!!!-->
+                                <input type="text" name="daterange" value="01/01/2022 - 01/15/2022" />
+
+                                <script>
+                                $(function() {
+                                    $('input[name="daterange"]').daterangepicker({
+                                        opens: 'left'
+                                    }, function(start, end, label) {
+                                        console.log("A new date selection was made: " + start.format('YYYY-MM-DD') + ' to ' + end.format('YYYY-MM-DD'));
+                                    });
+                                });
+                                </script>
+                                </div>
                             <!-- Product actions-->
                             <div class="card-footer p-4 pt-0 border-top-0 bg-transparent">
-                                <div class="text-center"><a class="btn btn-outline-dark mt-auto" href="#">Agregar al carrito</a></div>
+                                <div class="text-center"><a id="carrito2" class="btn btn-outline-dark mt-auto" href="#">Agregar al carrito</a></div>
                             </div>
                         </div>
                     </div>
@@ -358,11 +389,23 @@
                                     <span class="text-muted text-decoration-line-through">$20.000</span>
                                     $17.000
                                 </div>
+                                <!--CALENDARIO!!!!!!!-->
+                                <input type="text" name="daterange" value="01/01/2022 - 01/15/2022" />
+
+                                <script>
+                                $(function() {
+                                    $('input[name="daterange"]').daterangepicker({
+                                        opens: 'left'
+                                    }, function(start, end, label) {
+                                        console.log("A new date selection was made: " + start.format('YYYY-MM-DD') + ' to ' + end.format('YYYY-MM-DD'));
+                                    });
+                                });
+                                </script>
                                 
                             </div>
                             <!-- Product actions-->
                             <div class="card-footer p-4 pt-0 border-top-0 bg-transparent">
-                                <div class="text-center"><a class="btn btn-outline-dark mt-auto" href="#">Agregar al carrito</a></div>
+                                <div class="text-center"><a id="carrito3" class="btn btn-outline-dark mt-auto" href="#">Agregar al carrito</a></div>
                             </div>
                         </div>
                     </div>
@@ -387,10 +430,22 @@
                                     </div>
                                     $15.000
                                 </div>
+                                <!--CALENDARIO!!!!!!!-->
+                                <input type="text" name="daterange" value="01/01/2022 - 01/15/2022" />
+
+                                <script>
+                                $(function() {
+                                    $('input[name="daterange"]').daterangepicker({
+                                        opens: 'left'
+                                    }, function(start, end, label) {
+                                        console.log("A new date selection was made: " + start.format('YYYY-MM-DD') + ' to ' + end.format('YYYY-MM-DD'));
+                                    });
+                                });
+                                </script>
                             </div>
                             <!-- Product actions-->
                             <div class="card-footer p-4 pt-0 border-top-0 bg-transparent">
-                                <div class="text-center"><a class="btn btn-outline-dark mt-auto" href="#">Agregar al carrito</a></div>
+                                <div class="text-center"><a id="carrito4" class="btn btn-outline-dark mt-auto" href="#">Agregar al carrito</a></div>
                             </div>
                         </div>
                     </div>
@@ -416,10 +471,22 @@
                                     <span class="text-muted text-decoration-line-through">$25.000</span>
                                     $20.000
                                 </div>
+                                <!--CALENDARIO!!!!!!!-->
+                                <input type="text" name="daterange" value="01/01/2022 - 01/15/2022" />
+
+                                <script>
+                                $(function() {
+                                    $('input[name="daterange"]').daterangepicker({
+                                        opens: 'left'
+                                    }, function(start, end, label) {
+                                        console.log("A new date selection was made: " + start.format('YYYY-MM-DD') + ' to ' + end.format('YYYY-MM-DD'));
+                                    });
+                                });
+                                </script>
                             </div>
                             <!-- Product actions-->
                             <div class="card-footer p-4 pt-0 border-top-0 bg-transparent">
-                                <div class="text-center"><a class="btn btn-outline-dark mt-auto" href="#">Agregar al carrito</a></div>
+                                <div class="text-center"><a id="carrito5" class="btn btn-outline-dark mt-auto" href="#">Agregar al carrito</a></div>
                             </div>
                         </div>
                     </div>
@@ -442,10 +509,22 @@
                                     </div>
                                     $21.000
                                 </div>
+                                <!--CALENDARIO!!!!!!!-->
+                                <input type="text" name="daterange" value="01/01/2022 - 01/15/2022" />
+
+                                <script>
+                                $(function() {
+                                    $('input[name="daterange"]').daterangepicker({
+                                        opens: 'left'
+                                    }, function(start, end, label) {
+                                        console.log("A new date selection was made: " + start.format('YYYY-MM-DD') + ' to ' + end.format('YYYY-MM-DD'));
+                                    });
+                                });
+                                </script>
                             </div>
                             <!-- Product actions-->
                             <div class="card-footer p-4 pt-0 border-top-0 bg-transparent">
-                                <div class="text-center"><a class="btn btn-outline-dark mt-auto" href="#">Agregar al carrito</a></div>
+                                <div class="text-center"><a id="carrito6" class="btn btn-outline-dark mt-auto" href="#">Agregar al carrito</a></div>
                             </div>
                         </div>
                     </div>
@@ -473,10 +552,22 @@
                                     <span class="text-muted text-decoration-line-through">$29.000</span>
                                     $24.000
                                 </div>
+                                <!--CALENDARIO!!!!!!!-->
+                                <input type="text" name="daterange" value="01/01/2022 - 01/15/2022" />
+
+                                <script>
+                                $(function() {
+                                    $('input[name="daterange"]').daterangepicker({
+                                        opens: 'left'
+                                    }, function(start, end, label) {
+                                        console.log("A new date selection was made: " + start.format('YYYY-MM-DD') + ' to ' + end.format('YYYY-MM-DD'));
+                                    });
+                                });
+                                </script>
                             </div>
                             <!-- Product actions-->
                             <div class="card-footer p-4 pt-0 border-top-0 bg-transparent">
-                                <div class="text-center"><a class="btn btn-outline-dark mt-auto" href="#">Agregar al carrito</a></div>
+                                <div class="text-center"><a id="carrito7" class="btn btn-outline-dark mt-auto" href="#">Agregar al carrito</a></div>
                             </div>
                         </div>
                     </div>
@@ -501,10 +592,22 @@
                                     <!-- Product price-->
                                     $27.000
                                 </div>
+                                <!--CALENDARIO!!!!!!!-->
+                                <input type="text" name="daterange" value="01/01/2022 - 01/15/2022" />
+
+                                <script>
+                                $(function() {
+                                    $('input[name="daterange"]').daterangepicker({
+                                        opens: 'left'
+                                    }, function(start, end, label) {
+                                        console.log("A new date selection was made: " + start.format('YYYY-MM-DD') + ' to ' + end.format('YYYY-MM-DD'));
+                                    });
+                                });
+                                </script>
                             </div>
                             <!-- Product actions-->
                             <div class="card-footer p-4 pt-0 border-top-0 bg-transparent">
-                                <div class="text-center"><a class="btn btn-outline-dark mt-auto" href="#">Agregar al carrito</a></div>
+                                <div class="text-center"><a id="carrito8" class="btn btn-outline-dark mt-auto" href="#">Agregar al carrito</a></div>
                             </div>
                         </div>
                     </div>
@@ -515,11 +618,13 @@
         <footer class="py-5 bg-dark">
             <div class="container"><p class="m-0 text-center text-white">Vacaciones Top © Todos los derechos reservados Henestrosa Lucas, Giordano Juan Marco, Marzano Pedro, Spagna Bautista. Litovicius Patricia Carina. Diseño y Desarrollo web</p></div>
         </footer>
+        <script src="js/main.js"></script>
+        <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
         <!-- Bootstrap core JS-->
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
         <!-- Core theme JS-->
         <script src="js/scripts.js"></script>
-
+        
 
 
 
